@@ -67,7 +67,7 @@ def send_die_roll_message(channel_id, user_id, dice_args):
     Channel and username should be in unescaped format.
       eg. just U1234 or #C1234, and NOT <@U1234|user> <#C1234|general>
     """
-    dice_text, message = parse_dice_args(dice_args)
+    dice_text, comment = parse_dice_args(dice_args)
     num_dice, die_size, modifier = parse_dice_text(dice_text)
     dice_rolls = get_dice_rolls(num_dice, die_size)
     message = '<@{}> got *{}* on {}'.format(
@@ -75,6 +75,9 @@ def send_die_roll_message(channel_id, user_id, dice_args):
         sum(dice_rolls) + modifier,
         dice_text,
     )
+
+    if comment:
+        message += ': _{}_'.format(comment)
 
     headers = {
         'Content-Type': "application/json",
